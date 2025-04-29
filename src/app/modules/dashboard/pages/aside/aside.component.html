@@ -1,0 +1,104 @@
+<div class="relative">
+  <!-- Sidebar/Aside (Desktop) -->
+  <nav
+    [ngClass]="{
+      'w-16': collapsed,
+      'w-64': !collapsed,
+      'w-full': isMobile
+    }"
+    class="h-screen fixed left-0 top-0 z-20 flex flex-col transition-all duration-300 bg-gradient-to-b from-pgreen-500 to-pgreen-400 overflow-hidden shadow-xl transform">
+
+    <!-- Contenido del Sidebar -->
+    <div class="flex-grow overflow-y-auto">
+      <!-- Header del Sidebar -->
+      <div class="py-5 px-4 border-b border-pgreen-300">
+        <h2 class="text-white text-lg font-bold text-center">
+          <span *ngIf="!collapsed" class="transition-opacity duration-300">Sofia's Platform</span>
+          <span *ngIf="collapsed" class="text-2xl">SP</span>
+        </h2>
+      </div>
+
+      <ul class="mt-4 space-y-1 px-2">
+        <!-- Items del menú -->
+        <li *ngFor="let item of menuItems" class="mb-1">
+          <a
+            *ngIf="!item.children"
+            [routerLink]="item.route"
+            class="flex items-center gap-3 px-4 py-3 text-white hover:bg-pgreen-600 rounded-lg transition-all duration-200 hover:shadow-md">
+
+            <!-- Icono alineado a la izquierda con efecto mejorado -->
+            <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <!-- Icono dependiendo del tipo -->
+                <path *ngIf="item.icon === 'home'" d="M12 2L2 7v15h20V7z"></path>
+                <path *ngIf="item.icon === 'user'" d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4 0-7 2-7 5v1h14v-1c0-3-3-5-7-5z"></path>
+              </svg>
+            </div>
+
+            <!-- Título del ítem (con transición para los collapsed) -->
+            <span *ngIf="!collapsed" class="transition-opacity duration-300 font-medium">{{ item.label }}</span>
+          </a>
+
+          <!-- Submenú -->
+          <div *ngIf="item.children" class="mb-1">
+            <button
+              (click)="toggleSubmenu(item)"
+              class="w-full flex items-center justify-between px-4 py-3 text-white hover:bg-pgreen-600 rounded-lg transition-all duration-200 hover:shadow-md">
+
+              <!-- Icono para el grupo de menú -->
+              <div *ngIf="collapsed" class="mx-auto">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+              </div>
+
+              <div *ngIf="!collapsed" class="flex items-center gap-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+                <span class="flex-1 font-medium">{{ item.label }}</span>
+              </div>
+
+              <!-- Indicador de expansión -->
+              <svg *ngIf="!collapsed" class="w-5 h-5 text-white transition-transform duration-200"
+                   [ngClass]="{'rotate-180': item.expanded}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+
+            <!-- Submenú expandido con animación -->
+            <div *ngIf="item.expanded && !collapsed"
+                 class="pl-4 mt-1 overflow-hidden transition-all duration-300 ease-in-out">
+              <ul class="border-l-2 border-pgreen-300 ml-2">
+                <li *ngFor="let child of filterMenuItems(item.children)" class="mt-1">
+                  <a
+                    [routerLink]="child.route"
+                    class="flex items-center gap-3 px-4 py-2 text-white hover:bg-pgreen-600 rounded-lg transition-all duration-200 hover:shadow-md ml-2">
+
+                    <!-- Punto indicador para submenu -->
+                    <div class="w-2 h-2 rounded-full bg-white"></div>
+
+                    <!-- Título del submenú -->
+                    <span>{{ child.label }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Botón de Logout con mejor estilo -->
+    <div class="mt-auto p-4 border-t border-pgreen-300">
+      <button
+        (click)="logout()"
+        class="w-full flex items-center justify-center gap-2 bg-black hover:bg-pgreen-800 text-white px-4 py-3 rounded-lg transition-all duration-200 hover:shadow-md">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+        </svg>
+        <span *ngIf="!collapsed" class="font-medium">Cerrar sesión</span>
+      </button>
+    </div>
+  </nav>
+</div>

@@ -1,0 +1,54 @@
+<!-- component -->
+<div class="bg-gray-100 flex justify-center items-center h-screen">
+  <!-- Left: Image -->
+  <div class="w-1/2 h-screen hidden lg:block">
+    <img src="https://universitariadecolombia.edu.co/wp-content/uploads/2024/10/DSC0723-1-1200x800.jpg"
+         alt="Placeholder Image" class="object-cover w-full h-full">
+  </div>
+  <!-- Right: Login Form -->
+  <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
+    <h1 class="text-2xl font-semibold mb-4">Sofia's platform</h1>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!-- Email Input -->
+      <div class="mb-4">
+        <label for="email" class="block text-gray-600">Email</label>
+        <input type="email" id="email" formControlName="email"
+               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+               autocomplete="off">
+        <div
+          *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)"
+          class="text-red-500 text-sm mt-1">
+          <div *ngIf="loginForm.get('email')?.errors?.['required']">Email es requerido.</div>
+          <div *ngIf="loginForm.get('email')?.errors?.['email']">Formato de email inválido.</div>
+        </div>
+      </div>
+      <!-- Password Input -->
+      <div class="mb-4">
+        <label for="password" class="block text-gray-600">Password</label>
+        <input type="password" id="password" formControlName="password"
+               class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+               autocomplete="off">
+        <div
+          *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)"
+          class="text-red-500 text-sm mt-1">
+          <div *ngIf="loginForm.get('password')?.errors?.['required']">Password es requerido.</div>
+        </div>
+      </div>
+      <!-- Error message -->
+      <div *ngIf="errorMessage" class="mb-4 text-red-500 text-sm">
+        {{ errorMessage }}
+      </div>
+      <!-- Login Button -->
+      <button type="submit" [disabled]="!(loginForm) || loginForm.invalid || isLoading"
+              class="bg-pgreen-300 hover:bg-gray-800 text-white font-semibold rounded-md py-2 px-4 w-full">
+        <span *ngIf="isLoading">Cargando...</span>
+        <span *ngIf="!isLoading">Login</span>
+      </button>
+    </form>
+    <p class="mt-5 text-sm text-center text-gray-600">¿No tienes una cuenta? <a [routerLink]="'/auth/register'" class="text-pgreen-400 font-semibold hover:underline">Regístrate
+      aquí</a></p>
+    <div class="text-center text-xs text-gray-400 mt-10">
+      Copyright © Sofia's platform
+    </div>
+  </div>
+</div>

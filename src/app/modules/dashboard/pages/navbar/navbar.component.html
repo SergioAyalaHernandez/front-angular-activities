@@ -1,0 +1,85 @@
+<!-- Navbar con diseño responsivo -->
+<nav class="bg-pgreen-600 shadow-lg p-3">
+  <div class="container mx-auto flex justify-between items-center">
+    <!-- Icono de hamburguesa para móvil -->
+    <button (click)="toggleMenu()" class="text-white lg:hidden focus:outline-none">
+      <span class="material-icons text-2xl">menu</span>
+    </button>
+
+    <!-- Logo y título -->
+    <div class="flex items-center space-x-2">
+      <h1 class="text-white font-semibold text-xl">Sofia's Platform</h1>
+    </div>
+
+    <!-- Botón de perfil/opciones (opcional) -->
+    <!-- Botón de perfil/opciones -->
+    <div class="text-white hidden lg:block">
+      <div class="flex items-center space-x-4">
+        <button class="flex items-center space-x-2 hover:bg-pgreen-700 rounded-full px-3 py-1">
+          <span class="material-icons">account_circle</span>
+        </button>
+        <button (click)="logout()" class="flex items-center space-x-1 hover:bg-pgreen-700 rounded-full px-3 py-1">
+          <span class="material-icons">logout</span>
+          <span>Salir</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menú lateral (hamburguesa) -->
+  <div *ngIf="isMenuOpen" class="lg:hidden fixed inset-0 z-50 flex">
+    <!-- Overlay con efecto de desvanecimiento -->
+    <div class="bg-black bg-opacity-50 absolute inset-0" (click)="toggleMenu()"></div>
+
+    <!-- Panel lateral -->
+    <div class="relative w-80 max-w-[80%] bg-white h-full shadow-xl overflow-y-auto transform transition-transform duration-300 ease-in-out">
+      <!-- Encabezado del menú -->
+      <div class="bg-pgreen-600 p-4 flex justify-between items-center">
+        <h2 class="text-white text-lg font-semibold">Menú</h2>
+        <button (click)="toggleMenu()" class="text-white focus:outline-none">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+
+      <!-- Lista de opciones -->
+      <!-- Lista de opciones -->
+      <ul class="py-2">
+        <li *ngFor="let item of menuItems" class="border-b border-gray-100 last:border-b-0">
+          <a *ngIf="!item.children" [routerLink]="item.route" class="flex items-center px-4 py-3 hover:bg-gray-50 text-gray-800">
+            <span class="material-icons mr-3 text-pgreen-500">{{item.icon}}</span>
+            <span>{{ item.label }}</span>
+          </a>
+
+          <!-- Ítem con submenú -->
+          <div *ngIf="item.children" class="cursor-pointer">
+            <div (click)="toggleSubmenu(item)" class="flex items-center justify-between px-4 py-3 hover:bg-gray-50 text-gray-800">
+              <div class="flex items-center">
+                <span class="material-icons mr-3 text-pgreen-500">{{item.icon}}</span>
+                <span>{{ item.label }}</span>
+              </div>
+              <span class="material-icons text-gray-500">{{ item.expanded ? 'expand_less' : 'expand_more' }}</span>
+            </div>
+
+            <!-- Submenú -->
+            <ul *ngIf="item.expanded" class="bg-gray-50 pl-4">
+              <li *ngFor="let subItem of filterMenuItems(item.children)">
+                <a [routerLink]="subItem.route" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+                  <span class="material-icons mr-3 text-pgreen-400 text-sm">{{subItem.icon}}</span>
+                  <span>{{ subItem.label }}</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <!-- Botón de Cerrar Sesión -->
+        <li class="border-t border-gray-200 mt-2">
+          <button (click)="logout()" class="flex items-center w-full px-4 py-3 hover:bg-gray-50 text-red-600">
+            <span class="material-icons mr-3">logout</span>
+            <span>Cerrar sesión</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

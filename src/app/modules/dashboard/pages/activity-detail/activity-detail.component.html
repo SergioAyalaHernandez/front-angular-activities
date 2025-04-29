@@ -1,0 +1,188 @@
+<div class="container mx-auto px-4 py-8">
+  <!-- Spinner de carga -->
+  <div *ngIf="loading" class="flex justify-center items-center h-64">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error && !loading" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+    <strong class="font-bold">Error!</strong>
+    <span class="block sm:inline">{{ error }}</span>
+  </div>
+
+  <!-- Detalles de la actividad -->
+  <div *ngIf="actividad && !loading" class="bg-white shadow-lg rounded-lg overflow-hidden">
+    <!-- Imagen de la actividad -->
+    <div *ngIf="actividad.imagen" class="w-full h-64 overflow-hidden cursor-pointer" (click)="mostrarModal = true">
+      <img [src]="'data:' + actividad.imagen.contentType + ';base64,' + actividad.imagen.data"
+           [alt]="actividad.nombre" class="w-full h-full object-cover">
+    </div>
+
+    <!-- Modal para visualización de imagen -->
+    <div *ngIf="mostrarModal"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 transition-opacity"
+         (click)="mostrarModal = false">
+      <div class="max-w-4xl max-h-screen p-4 relative" (click)="$event.stopPropagation()">
+        <button class="absolute top-4 right-4 text-white bg-red-600 hover:bg-red-700 rounded-full p-2 z-10"
+                (click)="mostrarModal = false">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+
+        <div class="overflow-auto">
+          <div class="transform transition-transform origin-center"
+               [ngStyle]="{'transform': 'scale(' + escalaImagen + ')'}"
+               (dblclick)="cambiarEscalaConDobleClick()">
+            <img [src]="'data:' + actividad.imagen?.contentType + ';base64,' + actividad.imagen?.data"
+                 [alt]="actividad.nombre" class="max-w-full max-h-[80vh] object-contain">
+          </div>
+        </div>
+
+        <div
+          class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 bg-opacity-75 px-4 py-2 rounded-full z-20">
+          <div class="flex justify-center space-x-3">
+            <button class="bg-gray-700 hover:bg-gray-600 text-white py-1 px-3 rounded"
+                    (click)="escalaImagen = 1">1x
+            </button>
+            <button class="bg-gray-700 hover:bg-gray-600 text-white py-1 px-3 rounded"
+                    (click)="escalaImagen = 1.5">1.5x
+            </button>
+            <button class="bg-gray-700 hover:bg-gray-600 text-white py-1 px-3 rounded"
+                    (click)="escalaImagen = 2">2x
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="p-6">
+      <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ actividad.nombre }}</h1>
+
+      <div class="flex items-center mb-4">
+        <span
+          class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">{{ actividad.categoria }}</span>
+        <span class="ml-2 text-sm text-gray-600">Cupo máximo: {{ actividad.cupoMaximo }} personas</span>
+        <span class="ml-2 text-sm text-gray-600">Cupos disponibles: {{ actividad.cuposDisponibles }}</span>
+      </div>
+
+      <div class="flex items-center mb-4">
+        <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+          Estado: {{ actividad.estado }}
+        </span>
+      </div>
+
+      <div class="mb-6">
+        <p class="text-gray-700 text-base mb-4">{{ actividad.descripcion }}</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h3 class="text-sm font-medium text-gray-500">Fecha de inicio</h3>
+          <p class="text-base font-semibold">{{ actividad.fechaInicio | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h3 class="text-sm font-medium text-gray-500">Fecha de finalización</h3>
+          <p class="text-base font-semibold">{{ actividad.fechaFin | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-2">Dirección</h3>
+        <p class="text-gray-700">{{ actividad.recursos }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón para volver -->
+  <!-- Botones de navegación -->
+  <div class="mt-6 flex justify-between items-center">
+    <button class="flex items-center text-blue-600 hover:text-blue-800" (click)="history.back()">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+           stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+      </svg>
+      Volver atrás
+    </button>
+
+    <button *ngIf="actividad && isAdmin" (click)="mostrarUsuariosInscritos()"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+      </svg>
+      Ver participantes inscritos
+    </button>
+  </div>
+
+<!-- Modal para mostrar usuarios inscritos -->
+<div *ngIf="mostrarModalUsuarios"
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity">
+  <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+    <div class="flex justify-between items-center border-b p-4">
+      <h3 class="text-xl font-semibold text-gray-800">Participantes inscritos</h3>
+      <button (click)="cerrarModalUsuarios()" class="text-gray-500 hover:text-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-4">
+      <!-- Información de cupos y estado -->
+      <div class="mb-4 grid grid-cols-3 gap-4">
+        <div class="bg-blue-50 p-3 rounded-lg">
+          <span class="block text-sm text-gray-600">Cupo máximo</span>
+          <span class="text-lg font-semibold">{{ usuariosInscritos?.cupoMaximo || actividad?.cupoMaximo }}</span>
+        </div>
+        <div class="bg-green-50 p-3 rounded-lg">
+          <span class="block text-sm text-gray-600">Cupos disponibles</span>
+          <span class="text-lg font-semibold">{{ usuariosInscritos?.cuposDisponibles || actividad?.cuposDisponibles }}</span>
+        </div>
+        <div class="bg-yellow-50 p-3 rounded-lg">
+          <span class="block text-sm text-gray-600">Estado</span>
+          <span class="text-lg font-semibold capitalize">{{ usuariosInscritos?.estado || actividad?.estado }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-4 overflow-auto max-h-[50vh]">
+      <!-- Spinner de carga -->
+      <div *ngIf="loadingUsuarios" class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+
+      <!-- Mensaje si no hay usuarios -->
+      <div *ngIf="!loadingUsuarios && (!usuariosInscritos?.usuarios || usuariosInscritos?.usuarios?.length === 0)"
+           class="text-center py-8 text-gray-500">
+        No hay participantes inscritos en esta actividad.
+      </div>
+
+      <!-- Tabla de usuarios -->
+      <table *ngIf="!loadingUsuarios && usuariosInscritos && usuariosInscritos.usuarios && usuariosInscritos.usuarios.length > 0"
+             class="w-full border-collapse">
+        <thead>
+        <tr class="bg-gray-50">
+          <th class="border px-4 py-2 text-left">ID de Usuario</th>
+          <th class="border px-4 py-2 text-left">Correo</th>
+          <th class="border px-4 py-2 text-left">Fecha de Registro</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let usuario of usuariosInscritos?.usuarios" class="hover:bg-gray-50">
+          <td class="border px-4 py-2">{{ usuario.usuarioId }}</td>
+          <td class="border px-4 py-2">{{ usuario.correo }}</td>
+          <td class="border px-4 py-2">{{ usuario.fechaRegistro | date:'dd/MM/yyyy HH:mm' }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="border-t p-4 flex justify-end">
+      <button (click)="cerrarModalUsuarios()"
+              class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>

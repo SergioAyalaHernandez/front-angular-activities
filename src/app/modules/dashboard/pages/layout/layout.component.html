@@ -1,0 +1,14 @@
+<div class="min-h-screen flex bg-gray-50/50" [ngClass]="isMobile ? 'flex-col' : 'flex-row'">
+  <!-- Navbar (mobile only) -->
+  <app-navbar *ngIf="isMobile" [title]="'Sofia\'s Platform'" (sidebarToggled)="toggleSidebar()" />
+
+  <!-- Sidebar (desktop only) -->
+  <app-aside *ngIf="!isMobile" [collapsed]="isCollapsed" (collapseChange)="isCollapsed = $event" class="w-64" />
+
+  <!-- Main content -->
+  <main
+    [ngClass]="isMobile ? 'w-full' : 'flex-1'"
+    class="transition-all duration-300 p-4">
+    <router-outlet></router-outlet>
+  </main>
+</div>

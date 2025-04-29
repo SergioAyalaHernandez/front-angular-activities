@@ -1,0 +1,79 @@
+<div class="flex w-full h-screen bg-white overflow-hidden">
+  <!-- Sección de imagen -->
+  <div class="w-1/2 h-screen hidden lg:block">
+    <img src="https://universitariadecolombia.edu.co/wp-content/uploads/2024/10/DSC0723-1-1200x800.jpg" alt="Placeholder Image" class="object-cover w-full h-full">
+  </div>
+
+  <!-- Contenedor del formulario -->
+  <div class="flex flex-1 justify-center items-center px-8">
+    <div class="w-full max-w-md">
+      <div class="flex justify-center items-center mb-10">
+        <h1 class="text-2xl font-semibold text-black">Registro de Usuario</h1>
+      </div>
+      <form id="register-form" [formGroup]="registerForm" (ngSubmit)="register()" class="space-y-5">
+        <!-- Nombre -->
+        <div>
+          <label for="nombre" class="block text-gray-600 font-medium mb-1">Nombre</label>
+          <input type="text" id="nombre" formControlName="nombre" placeholder="Ingrese su nombre completo" required
+                 class="w-full p-3 rounded-lg bg-gray-200 text-sm focus:outline-none focus:ring-2 focus:bg-pgreen-100" />
+          <small class="text-red-600 text-sm mt-1 block" *ngIf="registerForm.get('nombre')?.touched && registerForm.get('nombre')?.errors">
+            <span *ngIf="registerForm.get('nombre')?.errors?.['required']">El nombre es obligatorio.</span>
+            <span *ngIf="registerForm.get('nombre')?.errors?.['minlength']">Debe tener al menos 3 caracteres.</span>
+          </small>
+        </div>
+
+        <!-- Correo -->
+        <div>
+          <label for="email" class="block text-gray-600 font-medium mb-1">Correo</label>
+          <input type="email" id="email" formControlName="email" placeholder="Ingrese su correo electrónico" required
+                 class="w-full p-3 rounded-lg bg-gray-200 text-sm focus:outline-none focus:ring-2 focus:bg-pgreen-100" />
+          <small class="text-red-600 text-sm mt-1 block" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors">
+            <span *ngIf="registerForm.get('email')?.errors?.['required']">El correo es obligatorio.</span>
+            <span *ngIf="registerForm.get('email')?.errors?.['email']">Formato de correo no válido.</span>
+          </small>
+        </div>
+
+        <!-- Identificación -->
+        <div>
+          <label for="identificacion" class="block text-gray-600 font-medium mb-1">Identificación</label>
+          <input type="text" id="identificacion" formControlName="identificacion" placeholder="Ingrese su número de identificación" required
+                 class="w-full p-3 rounded-lg bg-gray-200 text-sm focus:outline-none focus:ring-2 focus:bg-pgreen-100" />
+          <small class="text-red-600 text-sm mt-1 block" *ngIf="registerForm.get('identificacion')?.touched && registerForm.get('identificacion')?.errors">
+            <span *ngIf="registerForm.get('identificacion')?.errors?.['required']">La identificación es obligatoria.</span>
+            <span *ngIf="registerForm.get('identificacion')?.errors?.['minlength']">Debe tener al menos 10 caracteres.</span>
+          </small>
+        </div>
+
+        <!-- Contraseña -->
+        <div>
+          <label for="password" class="block text-gray-600 font-medium mb-1">Contraseña</label>
+          <input type="password" id="password" formControlName="password" placeholder="Ingrese su contraseña, mínimo 8 caracteres" required
+                 class="w-full p-3 rounded-lg bg-gray-200 text-sm focus:outline-none focus:ring-2 focus:bg-pgreen-100" />
+          <small class="text-red-600 text-sm mt-1 block" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
+            <span *ngIf="registerForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</span>
+            <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Debe tener al menos 8 caracteres.</span>
+          </small>
+        </div>
+
+        <!-- Botón -->
+        <div class="flex justify-center">
+          <button id="button-login" type="submit"
+                  class="w-3/5 p-3 rounded-lg bg-pgreen-400 text-white text-base font-bold hover:bg-pgreen-300 transition-colors">
+            Registrarme
+          </button>
+        </div>
+      </form>
+
+      <!-- Enlace de login -->
+      <p class="mt-5 text-sm text-center text-gray-600">
+        ¿Ya tienes una cuenta?
+        <a [routerLink]="'/auth'" class="text-pgreen-400 font-semibold hover:underline">Inicia sesión</a>
+      </p>
+
+      <!-- Footer -->
+      <div class="text-center text-xs text-gray-400 mt-10">
+        Copyright © Sofia's platform
+      </div>
+    </div>
+  </div>
+</div>

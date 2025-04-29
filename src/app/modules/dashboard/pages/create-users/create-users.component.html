@@ -1,0 +1,72 @@
+<div class="p-8 bg-white rounded-xl shadow-md max-w-3xl mx-auto">
+  <h2 class="text-xl font-semibold text-black mb-6 text-center">Registro de Usuario</h2>
+
+  <form [formGroup]="registerForm" (ngSubmit)="register()" class="space-y-5">
+    <!-- Nombre -->
+    <div>
+      <label for="nombre" class="block text-gray-600 font-medium mb-1">Nombre</label>
+      <input type="text" id="nombre" formControlName="nombre" placeholder="Ingrese su nombre completo"
+             class="w-full p-3 rounded-lg bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300" />
+      <small class="text-red-600 text-sm mt-1 block" *ngIf="registerForm.get('nombre')?.touched && registerForm.get('nombre')?.errors">
+        <span *ngIf="registerForm.get('nombre')?.errors?.['required']">El nombre es obligatorio.</span>
+        <span *ngIf="registerForm.get('nombre')?.errors?.['minlength']">Debe tener al menos 3 caracteres.</span>
+      </small>
+    </div>
+
+    <!-- Correo -->
+    <div>
+      <label for="email" class="block text-gray-600 font-medium mb-1">Correo</label>
+      <input type="email" id="email" formControlName="email" placeholder="Ingrese su correo electrónico"
+             class="w-full p-3 rounded-lg bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300" />
+      <small class="text-red-600 text-sm mt-1 block" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors">
+        <span *ngIf="registerForm.get('email')?.errors?.['required']">El correo es obligatorio.</span>
+        <span *ngIf="registerForm.get('email')?.errors?.['email']">Formato de correo no válido.</span>
+      </small>
+    </div>
+
+    <!-- Identificación -->
+    <div>
+      <label for="identificacion" class="block text-gray-600 font-medium mb-1">Identificación</label>
+      <input type="text" id="identificacion" formControlName="identificacion" placeholder="Ingrese su número de identificación"
+             class="w-full p-3 rounded-lg bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300" />
+      <small class="text-red-600 text-sm mt-1 block" *ngIf="registerForm.get('identificacion')?.touched && registerForm.get('identificacion')?.errors">
+        <span *ngIf="registerForm.get('identificacion')?.errors?.['required']">La identificación es obligatoria.</span>
+        <span *ngIf="registerForm.get('identificacion')?.errors?.['minlength']">Debe tener al menos 10 caracteres.</span>
+      </small>
+    </div>
+
+    <!-- Contraseña -->
+    <div>
+      <label for="password" class="block text-gray-600 font-medium mb-1">Contraseña</label>
+      <input type="password" id="password" formControlName="password" placeholder="Ingrese su contraseña"
+             class="w-full p-3 rounded-lg bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300" />
+      <small class="text-red-600 text-sm mt-1 block" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
+        <span *ngIf="registerForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</span>
+        <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Debe tener al menos 8 caracteres.</span>
+      </small>
+    </div>
+
+    <!-- Rol -->
+    <div>
+      <label for="rol" class="block text-gray-600 font-medium mb-1">Rol</label>
+      <select id="rol" formControlName="rol"
+              class="w-full p-3 rounded-lg bg-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300">
+        <option value="">Seleccione un rol</option>
+        <option value="admin">admin</option>
+        <option value="profesor">profesor</option>
+        <option value="estudiante">estudiante</option>
+      </select>
+      <small class="text-red-600 text-sm mt-1 block" *ngIf="registerForm.get('rol')?.touched && registerForm.get('rol')?.errors">
+        <span *ngIf="registerForm.get('rol')?.errors?.['required']">El rol es obligatorio.</span>
+      </small>
+    </div>
+
+    <!-- Botón -->
+    <div class="flex justify-center">
+      <button type="submit"
+              class="w-1/2 p-3 rounded-lg bg-pgreen-500 hover:bg-pgreen-700 text-white font-semibold hover:bg-blue-500 transition">
+        Registrar
+      </button>
+    </div>
+  </form>
+</div>

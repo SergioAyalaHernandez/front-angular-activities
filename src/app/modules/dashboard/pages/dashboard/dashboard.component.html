@@ -1,0 +1,67 @@
+<!-- dashboard.component.html -->
+<div class="min-h-screen flex flex-col bg-gray-50/50">
+
+  <!-- Título y Subtítulo -->
+  <div class="text-center py-6">
+    <h1 class="text-4xl font-bold text-gray-900">Nuestras Actividades</h1>
+    <p class="text-lg text-gray-600 mt-2">Explora una variedad de actividades diseñadas para mejorar tus habilidades.</p>
+  </div>
+
+  <!-- Contenido del grid -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-10">
+    <!-- Loop through grid positions -->
+    <ng-container *ngFor="let position of gridPositions; let i = index">
+      <!-- Large Box (First and Last Position) - On mobile all are full width -->
+      <div *ngIf="isLargePosition(i)"
+           class="col-span-1 md:col-span-2 md:row-span-2">
+        <!-- If we have data for this position -->
+        <div *ngIf="i < actividades.length"
+             class="relative bg-cover bg-center rounded-lg overflow-hidden shadow-lg max-h-[528px] h-64 md:h-full">
+          <div class="w-full h-full">
+            <img [src]="'data:' + actividades[i].imagen?.contentType + ';base64,' + actividades[i].imagen?.data || 'https://via.placeholder.com/400x250'"
+                 class="w-full h-full object-cover object-center" alt="{{ actividades[i].nombre }}" />
+          </div>
+          <div class="absolute bottom-0 left-0 p-4 md:p-6 bg-black bg-opacity-50 w-full">
+            <h2 class="text-xl font-semibold text-white">{{ actividades[i].nombre }}</h2>
+            <p class="text-base text-white mt-2">{{ actividades[i].descripcion }}</p>
+            <a [routerLink]="['actividades/', actividades[i].id]" class="focus:outline-none focus:underline flex items-center mt-4 text-white hover:text-gray-200 hover:underline">
+              <p class="pr-2 text-sm font-medium leading-none">Leer más</p>
+              <svg class="fill-stroke" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.75 12.5L10.25 8L5.75 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+          </div>
+        </div>
+        <!-- Skeleton loading for empty large position -->
+        <div *ngIf="i >= actividades.length"
+             class="bg-gray-200 animate-pulse rounded-lg shadow-lg h-64 md:h-full">
+        </div>
+      </div>
+
+      <!-- Regular Box (All other positions) -->
+      <div *ngIf="!isLargePosition(i)"
+           class="col-span-1">
+        <!-- If we have data for this position -->
+        <div *ngIf="i < actividades.length"
+             class="relative bg-cover bg-center rounded-lg overflow-hidden shadow-lg h-64">
+          <img [src]="'data:' + actividades[i].imagen?.contentType + ';base64,' + actividades[i].imagen?.data || 'https://via.placeholder.com/400x250'"
+               class="w-full h-full object-cover" />
+          <div class="absolute bottom-0 left-0 p-4 bg-black bg-opacity-50 w-full">
+            <h2 class="text-lg font-semibold text-white">{{ actividades[i].nombre }}</h2>
+            <p class="text-sm text-white mt-1">{{ actividades[i].descripcion }}</p>
+            <a [routerLink]="['actividades/', actividades[i].id]" class="focus:outline-none focus:underline flex items-center mt-4 text-white hover:text-gray-200 hover:underline">
+              <p class="pr-2 text-sm font-medium leading-none">Leer más</p>
+              <svg class="fill-stroke" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.75 12.5L10.25 8L5.75 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+          </div>
+        </div>
+        <!-- Skeleton loading for empty regular position -->
+        <div *ngIf="i >= actividades.length"
+             class="bg-gray-200 animate-pulse rounded-lg shadow-lg h-64">
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
