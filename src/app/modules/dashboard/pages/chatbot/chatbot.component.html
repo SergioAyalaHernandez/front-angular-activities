@@ -1,0 +1,44 @@
+<!-- Botón flotante -->
+<div class="fixed bottom-5 right-5 z-50">
+  <button
+    class="bg-pgreen-400 text-white p-4 rounded-full shadow-lg hover:bg-pgreen-500 transition-all"
+    (click)="toggleChat()"
+  >
+    💬
+  </button>
+</div>
+
+<!-- Ventana del chat -->
+<div
+  *ngIf="isOpen"
+  class="fixed bottom-20 right-5 w-80 bg-white border border-gray-300 shadow-lg rounded-xl z-50 p-4 flex flex-col"
+>
+  <h2 class="text-lg font-semibold text-gray-800 mb-2">Bienvenido 👋</h2>
+
+  <div class="flex-1 overflow-y-auto max-h-80 mb-3 space-y-3 p-1">
+    <div *ngFor="let message of messages"
+         class="animate-slide-in"
+         [ngClass]="{ 'flex justify-end': message.sender === 'user' }">
+      <div class="max-w-[80%]"
+           [ngClass]="{
+             'bg-gray-100 rounded-lg rounded-tl-none p-3 border-l-4 border-pgreen-300': message.sender === 'bot',
+             'bg-pgreen-400 rounded-lg rounded-tr-none p-3 text-white': message.sender === 'user'
+           }">
+        <p class="text-sm">{{ message.text }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-t pt-2 mt-1" *ngIf="showOptions">
+    <div class="text-xs text-gray-500 mb-2">Selecciona una opción:</div>
+    <div class="max-h-40 overflow-y-auto space-y-2">
+      <button
+        *ngFor="let q of questions"
+        (click)="handleUserChoice(q)"
+        class="w-full text-left mb-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg hover:bg-pgreen-50 hover:border-pgreen-200 text-sm transition-colors duration-200"
+      >
+        {{ q.menu_text }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -33,6 +33,8 @@ export class ActivityDetailComponent implements OnInit {
   // @ts-ignore
   history = window.history;
 
+  usuarioInscrito = false;
+
   mostrarModalUsuarios = false;
   loadingUsuarios = false;
   usuariosInscritos: UsuariosInscritos | null = null;
@@ -41,7 +43,7 @@ export class ActivityDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private activityService: ActivityService,
     private notificationService: NotificationService,
-    private authServices: AuthService
+    protected authServices: AuthService
   ) {
   }
 
@@ -110,6 +112,32 @@ export class ActivityDetailComponent implements OnInit {
 
   cerrarModalUsuarios(): void {
     this.mostrarModalUsuarios = false;
+  }
+
+
+  inscribirseEnActividad(): void {
+    if (this.actividad) {
+      const usuarioId = this.authServices.getUserId();
+      const correo = this.authServices.getMail();
+
+      this.activityService.registrarUsuarioEnActividad(
+        this.actividad.id,
+        usuarioId,
+        correo
+      ).subscribe({
+        next: (response) => {
+          this.usuarioInscrito = true;
+
+          // @ts-ignore
+          this.actividad.cuposDisponibles--;
+          this.notificationService.showNotification("Inscripción exitosa", 'success');
+        },
+        error: (err: any) => {
+          const errorMessage = typeof err.error === 'object' ? err.error.error : err.error;
+          this.notificationService.showNotification(errorMessage || 'Error desconocido', 'error');
+        }
+      });
+    }
   }
 
 }

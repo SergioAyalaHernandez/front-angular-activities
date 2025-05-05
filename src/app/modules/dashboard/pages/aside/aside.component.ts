@@ -8,7 +8,7 @@ interface MenuItem {
   route?: string;
   children?: MenuItem[];
   expanded?: boolean;
-  adminOnly?: boolean;
+  roles?: string[];
 }
 
 @Component({
@@ -22,6 +22,8 @@ export class AsideComponent implements OnInit {
   isAdmin: boolean = false;
   sidebarVisible = false;
   isMobile = false;
+  isProfesor: boolean = false;
+  isEstudiante: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -41,7 +43,9 @@ export class AsideComponent implements OnInit {
 
   checkUserRole() {
     const userRoles = this.authService.getUserRole();
-    this.isAdmin = userRoles.includes('admin') || userRoles.includes('profesor');
+    this.isAdmin = userRoles.includes('admin');
+    this.isProfesor = userRoles.includes('profesor');
+    this.isEstudiante = userRoles.includes('estudiante');
   }
 
   logout(): void {
@@ -55,8 +59,8 @@ export class AsideComponent implements OnInit {
       icon: 'user',
       label: 'Usuarios',
       children: [
-        { icon: 'profile', label: 'Crear Usuario', route: 'create-user', adminOnly: true },
-        { icon: 'profile', label: 'Listado de usuarios', route: 'users', adminOnly: true },
+        { icon: 'profile', label: 'Crear Usuario', route: 'create-user', roles: ['admin'] },
+        { icon: 'profile', label: 'Listado de usuarios', route: 'users', roles: ['admin'] },
         { icon: 'profile', label: 'mi perfil', route: 'user-detail'},
       ]
     },
@@ -64,8 +68,9 @@ export class AsideComponent implements OnInit {
       icon: 'user',
       label: 'Actividades',
       children: [
-        { icon: 'admin', label: 'Crear Actividad', route: '/home/create-activity' ,adminOnly: true},
+        { icon: 'admin', label: 'Crear Actividad', route: '/home/create-activity', roles: ['admin', 'profesor']},
         { icon: 'admin', label: 'Listar Actividades', route: '/home/list-activity' },
+        { icon: 'admin', label: 'Mis Actividades', route: '/home/student-activities', roles: ['estudiante']},
       ]
     }
   ];
@@ -78,10 +83,15 @@ export class AsideComponent implements OnInit {
 
   filterMenuItems(items: MenuItem[]): MenuItem[] {
     return items
-      .filter(item => !item.adminOnly || (item.adminOnly && this.isAdmin))
+      .filter(item => !item.roles || this.hasRequiredRole(item.roles))
       .map(item => ({
         ...item,
         children: item.children ? this.filterMenuItems(item.children) : undefined
       }));
+  }
+
+  hasRequiredRole(roles: string[]): boolean {
+    const userRoles = this.authService.getUserRole();
+    return roles.some(role => userRoles.includes(role));
   }
 }
