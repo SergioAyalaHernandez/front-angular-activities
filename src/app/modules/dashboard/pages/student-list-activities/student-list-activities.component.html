@@ -1,0 +1,66 @@
+<div class="container mx-auto p-6">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-pgreen-700">Mis Actividades</h1>
+    <p class="text-gray-600">Listado de actividades en las que estás inscrito</p>
+  </div>
+
+  <div *ngIf="loading" class="flex justify-center items-center h-40">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pgreen-600"></div>
+  </div>
+
+  <div *ngIf="!loading && studentActivities.length === 0" class="bg-gray-100 p-6 rounded-lg text-center">
+    <p class="text-gray-700">No estás inscrito en ninguna actividad actualmente.</p>
+  </div>
+
+  <div *ngIf="!loading && studentActivities.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div *ngFor="let activity of studentActivities" class="bg-white rounded-lg shadow-md overflow-hidden">
+      <div *ngIf="activity.imagen?.data" class="h-48 overflow-hidden">
+        <img [src]="'data:' + activity.imagen.contentType + ';base64,' + activity.imagen.data"
+             [alt]="activity.nombre"
+             class="w-full h-full object-cover">
+      </div>
+      <div class="p-4">
+        <h2 class="text-xl font-bold text-pgreen-700 mb-2">{{activity.nombre}}</h2>
+        <p class="text-gray-600 mb-4">{{activity.descripcion}}</p>
+
+        <div class="grid grid-cols-2 gap-2 mb-4">
+          <div class="text-sm">
+            <span class="font-semibold text-gray-700">Categoría:</span>
+            <span class="ml-1 capitalize">{{activity.categoria}}</span>
+          </div>
+          <div class="text-sm">
+            <span class="font-semibold text-gray-700">Estado:</span>
+            <span class="ml-1 capitalize">{{activity.estado}}</span>
+          </div>
+          <div class="text-sm" *ngIf="activity.fechaInicio">
+            <span class="font-semibold text-gray-700">Fecha Inicio:</span>
+            <span class="ml-1">{{activity.fechaInicio | date:'dd/MM/yyyy'}}</span>
+          </div>
+          <div class="text-sm" *ngIf="activity.fechaFin">
+            <span class="font-semibold text-gray-700">Fecha Fin:</span>
+            <span class="ml-1">{{activity.fechaFin | date:'dd/MM/yyyy'}}</span>
+          </div>
+          <div class="text-sm" *ngIf="activity.horaInicio">
+            <span class="font-semibold text-gray-700">Hora Inicio:</span>
+            <span class="ml-1">{{activity.horaInicio}}</span>
+          </div>
+          <div class="text-sm" *ngIf="activity.horaFin">
+            <span class="font-semibold text-gray-700">Hora Fin:</span>
+            <span class="ml-1">{{activity.horaFin}}</span>
+          </div>
+        </div>
+
+        <div class="mt-2 flex items-center">
+          <span class="text-xs bg-pgreen-100 text-pgreen-800 px-2 py-1 rounded-full">
+            Cupo: {{activity.cuposDisponibles}} de {{activity.cupoMaximo}} disponibles
+          </span>
+        </div>
+
+        <div *ngIf="activity.recursos" class="mt-4 text-sm">
+          <span class="font-semibold text-gray-700">Recursos:</span>
+          <p class="text-gray-600">{{activity.recursos}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

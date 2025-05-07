@@ -38,6 +38,8 @@ export class ActivityDetailComponent implements OnInit {
   mostrarModalUsuarios = false;
   loadingUsuarios = false;
   usuariosInscritos: UsuariosInscritos | null = null;
+  mostrarModalConfirmacion = false;
+  usuarioAEliminar: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -138,6 +140,70 @@ export class ActivityDetailComponent implements OnInit {
         }
       });
     }
+  }
+
+  cancelarRegistroUsuario(usuarioId: string): void {
+    // En lugar de usar confirm(), mostramos un modal personalizado
+    this.usuarioAEliminar = usuarioId;
+    this.mostrarModalConfirmacion = true;
+  }
+
+  confirmarEliminacion(): void {
+    if (!this.usuarioAEliminar) return;
+
+    this.loading = true;
+
+    const payload = {
+      usuarioId: this.usuarioAEliminar
+    };
+
+    this.activityService.cancelarRegistroUsuario(this.actividadId, payload)
+      .subscribe({
+        next: (response) => {
+          this.notificationService.showNotification('Usuario eliminado correctamente', 'success');
+
+          // Actualizar los datos
+          if (this.usuariosInscritos) {
+            this.usuariosInscritos.cuposDisponibles = response.cuposRestantes;
+            this.usuariosInscritos.usuarios = this.usuariosInscritos.usuarios.filter(
+              usuario => usuario.usuarioId !== this.usuarioAEliminar
+            );
+
+            // Actualizar estado si es necesario
+            if (this.usuariosInscritos.estado === 'completo' && response.cuposRestantes > 0) {
+              this.usuariosInscritos.estado = 'abierto';
+            }
+
+            // Actualizar también la actividad principal
+            if (this.actividad) {
+              this.actividad.cuposDisponibles = response.cuposRestantes;
+              this.actividad.estado = this.usuariosInscritos.estado;
+            }
+          }
+
+          this.loading = false;
+          this.cerrarModalConfirmacion();
+        },
+        error: (error) => {
+          console.error('Error al eliminar usuario:', error);
+          let mensaje = 'Error al eliminar usuario de la actividad';
+
+          if (typeof error.error === 'string') {
+            mensaje = error.error;
+          } else if (error.error && error.error.error) {
+            mensaje = error.error.error;
+          }
+
+          this.notificationService.showNotification(mensaje, 'error');
+          this.loading = false;
+          this.cerrarModalConfirmacion();
+        }
+      });
+  }
+
+  cerrarModalConfirmacion(): void {
+    this.mostrarModalConfirmacion = false;
+    this.usuarioAEliminar = null;
   }
 
 }

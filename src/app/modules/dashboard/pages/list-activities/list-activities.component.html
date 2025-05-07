@@ -64,14 +64,29 @@
 
           <!-- Botones para admin o profesor -->
           <ng-container *ngIf="isAdminOrProfessor">
-            <button (click)="editActivity(activity)"
-                    class="bg-pgreen-600 hover:bg-pgreen-700 text-white py-1 px-3 rounded-md text-sm">
-              Editar
-            </button>
-            <button (click)="deleteActivity(activity)"
-                    class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-sm">
-              Eliminar
-            </button>
+            <!-- Si es admin o es el profesor creador de la actividad -->
+            <ng-container *ngIf="isAdmin || checkCreatorPermission(activity)">
+              <button (click)="editActivity(activity)"
+                      class="bg-pgreen-600 hover:bg-pgreen-700 text-white py-1 px-3 rounded-md text-sm">
+                Editar
+              </button>
+              <button (click)="deleteActivity(activity)"
+                      class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-sm">
+                Eliminar
+              </button>
+            </ng-container>
+
+            <!-- Si es profesor pero no es el creador de la actividad -->
+            <ng-container *ngIf="!isAdmin && !checkCreatorPermission(activity)">
+              <button (click)="showPermissionAlert()"
+                      class="bg-gray-400 text-white py-1 px-3 rounded-md text-sm cursor-not-allowed">
+                Editar
+              </button>
+              <button (click)="showPermissionAlert()"
+                      class="bg-gray-400 text-white py-1 px-3 rounded-md text-sm cursor-not-allowed">
+                Eliminar
+              </button>
+            </ng-container>
           </ng-container>
 
           <!-- Botón para estudiantes -->

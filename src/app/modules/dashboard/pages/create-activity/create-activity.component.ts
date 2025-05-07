@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivityService } from "../../../../services/activity.service";
 import {NotificationService} from "../../../../services/notification.service";
 import {Router} from "@angular/router";
+import {AuthService} from "../../../../services/auth.service";
 
 @Component({
   selector: 'app-create-activity',
@@ -18,6 +19,7 @@ export class CreateActivityComponent {
     private fb: FormBuilder,
     private activityService: ActivityService,
     private notificationService: NotificationService,
+    private authService: AuthService,
     private router: Router,
   ) {
     this.actividadForm = this.fb.group({
@@ -74,6 +76,7 @@ export class CreateActivityComponent {
           recursos: formValues.recursos,
           enlace: formValues.enlace,
           categoria: "deporte",
+          profesorId: this.authService.getUserId(),
           imagen: imagenBase64
         };
         const token = '<TOKEN>';
@@ -90,6 +93,7 @@ export class CreateActivityComponent {
           actividadData.recursos,
           actividadData.enlace,
           actividadData.categoria,
+          actividadData.profesorId,
           imagenFile
         ).subscribe(response => {
           this.notificationService.showNotification('Actividad creada con éxito', 'success');

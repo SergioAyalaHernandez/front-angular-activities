@@ -16,6 +16,7 @@ import { ListActivitiesComponent } from './pages/list-activities/list-activities
 import { UserDetailsComponent } from './pages/user-details/user-details.component';
 import { ActivityDetailComponent } from './pages/activity-detail/activity-detail.component';
 import { ChatbotComponent } from './pages/chatbot/chatbot.component';
+import { StudentListActivitiesComponent } from './pages/student-list-activities/student-list-activities.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { ChatbotComponent } from './pages/chatbot/chatbot.component';
     ListActivitiesComponent,
     UserDetailsComponent,
     ActivityDetailComponent,
-    ChatbotComponent
+    ChatbotComponent,
+    StudentListActivitiesComponent
   ],
   imports: [
     CommonModule,

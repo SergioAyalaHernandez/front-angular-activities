@@ -41,7 +41,7 @@ export class NavbarComponent implements OnInit {
       children: [
         { icon: 'admin', label: 'Crear Actividad', route: '/home/create-activity', roles: ['admin', 'profesor']},
         { icon: 'admin', label: 'Listar Actividades', route: '/home/list-activity' },
-        { icon: 'admin', label: 'Mis Actividades', route: '/home/student-activities', roles: ['estudiante']},
+        { icon: 'admin', label: 'Mis Actividades', route: '/home/actividades-estudiante', roles: ['estudiante']},
       ]
     }
   ];

@@ -18,6 +18,7 @@ export class ListActivitiesComponent {
   showEditModal: boolean = false;
   editForm: FormGroup;
   activityToEdit: any = null;
+  isAdmin = false;
 
 
   constructor(
@@ -42,8 +43,9 @@ export class ListActivitiesComponent {
   }
 
   checkUserRoles(): void {
-    const userRoles = this.authService.getUserRole();
-    this.isAdminOrProfessor = userRoles.includes('admin') || userRoles.includes('profesor');
+    const userRole = this.authService.getUserRole();
+    this.isAdmin = userRole === 'admin';
+    this.isAdminOrProfessor = userRole === 'admin' || userRole === 'profesor';
   }
   loadActivities(): void {this.listServices.obtenerActividades().subscribe(
     (res: any) => {
@@ -108,7 +110,7 @@ export class ListActivitiesComponent {
           this.closeEditModal();
         },
         (error) => {
-          this.notificationService.showNotification('Error al actualizar la actividad', 'error');
+          this.notificationService.showNotification(error.error.error, 'error');
         }
       );
     }
@@ -185,4 +187,14 @@ export class ListActivitiesComponent {
       }
     });
   }
+
+  checkCreatorPermission(activity: any): boolean {
+    const userId = this.authService.getUserId();
+    return activity.profesorId === userId;
+  }
+
+  showPermissionAlert(): void {
+    this.notificationService.showNotification('No tienes permisos para modificar esta actividad. Solo el profesor que la creó puede editarla o eliminarla.', 'warning');
+  }
+
 }

@@ -9,6 +9,7 @@ import {UserComponent} from "./pages/user/user.component";
 import {ListActivitiesComponent} from "./pages/list-activities/list-activities.component";
 import {UserDetailsComponent} from "./pages/user-details/user-details.component";
 import {ActivityDetailComponent} from "./pages/activity-detail/activity-detail.component";
+import {StudentListActivitiesComponent} from "./pages/student-list-activities/student-list-activities.component";
 
 const routes: Routes = [
   {
@@ -44,7 +45,11 @@ const routes: Routes = [
     component: UserDetailsComponent,
   },
   { path: 'actividades/:id',
-    component: ActivityDetailComponent },
+    component: ActivityDetailComponent
+  },
+  { path: 'actividades-estudiante',
+    component: StudentListActivitiesComponent
+  },
   {
     path: '',
     redirectTo: '/',

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import {Observable, from, switchMap} from "rxjs";
+import {Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {from, Observable, switchMap} from "rxjs";
 
 export interface Actividad {
   id: string;
@@ -28,8 +28,7 @@ export interface Actividad {
 })
 export class ActivityService {
 
-  private apiUrl = 'http://127.0.0.1:8000/api/actividades/crear/';
-  private apiUrlActividades = 'http://localhost:8000/api/actividades/obtener-actividades/';
+  private baseUrl = 'http://localhost:8000/api/actividades';
 
   constructor(private http: HttpClient) { }
 
@@ -56,6 +55,7 @@ export class ActivityService {
     recursos: string,
     enlace: string,
     categoria: string,
+    profesorId: string,
     imagen: File
   ): Observable<any> {
 
@@ -72,19 +72,20 @@ export class ActivityService {
           recursos,
           enlace,
           categoria,
+          profesorId,
           imagen: imagenBase64
         };
 
-        return this.http.post(this.apiUrl, actividad, );
+        return this.http.post(`${this.baseUrl}/crear/`, actividad);
       })
     );
   }
   obtenerActividades(): Observable<Actividad[]> {
-    return this.http.get<Actividad[]>(this.apiUrlActividades);
+    return this.http.get<Actividad[]>(`${this.baseUrl}/obtener-actividades/`);
   }
 
   obtenerActividadPorId(id: string): Observable<Actividad> {
-    return this.http.get<Actividad>(`http://localhost:8000/api/actividades/actividad/${id}/`);
+    return this.http.get<Actividad>(`${this.baseUrl}/actividad/${id}/`);
   }
 
   actualizarActividad(
@@ -100,33 +101,35 @@ export class ActivityService {
             ...actividad,
             imagen: imagenBase64
           };
-
-          return this.http.put(`http://localhost:8000/api/actividades/actividad/${id}/actualizar/`, datosActualizados);
+          return this.http.put(`${this.baseUrl}/actividad/${id}/actualizar/`, datosActualizados);
         })
       );
     } else {
-
-
-      return this.http.put(`http://localhost:8000/api/actividades/actividad/${id}/actualizar/`, actividad);
+      return this.http.put(`${this.baseUrl}/actividad/${id}/actualizar/`, actividad);
     }
   }
 
   eliminarActividad(id: string): Observable<any> {
-    return this.http.delete(`http://localhost:8000/api/actividades/actividad/${id}/eliminar/`);
+    return this.http.delete(`${this.baseUrl}/actividad/${id}/eliminar/`);
   }
 
   registrarUsuarioEnActividad(actividadId: string, usuarioId: string, correo: string): Observable<any> {
     const datos = { usuarioId, correo };
-    return this.http.post(
-      `http://localhost:8000/api/actividades/actividades/${actividadId}/registrar-usuario/`,
-      datos,
-    );
+    return this.http.post(`${this.baseUrl}/actividades/${actividadId}/registrar-usuario/`, datos);
   }
 
   obtenerUsuariosRegistrados(actividadId: string): Observable<any> {
     return this.http.get(
-      `http://localhost:8000/api/actividades/actividades/${actividadId}/usuarios-registrados/`
+      `${this.baseUrl}/actividades/${actividadId}/usuarios-registrados/`
     );
+  }
+
+  cancelarRegistroUsuario(actividadId: string, payload: any) {
+    return this.http.post<any>(`${this.baseUrl}/actividades/${actividadId}/cancelar-registro/`, payload);
+  }
+
+  getActividadesUsuario(userId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/actividades/usuario/${userId}`);
   }
 
 }
