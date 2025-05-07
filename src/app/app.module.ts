@@ -26,7 +26,9 @@ import {MatIconModule} from "@angular/material/icon";
   ],
   providers: [
     CookieService,
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+  ],
+  exports: [
   ],
   bootstrap: [AppComponent]
 })

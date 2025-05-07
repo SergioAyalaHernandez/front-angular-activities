@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
         this.cookieService.set('accessToken', res.access, { secure: true, sameSite: 'Strict' });
         this.cookieService.set('refreshToken', res.refresh, { secure: true, sameSite: 'Strict' });
         this.cookieService.set('id', res.user.id, { secure: true, sameSite: 'Strict' });
-
+        sessionStorage.setItem('userEmail', res.user.email);
         // Store user role if it comes in the response - if not, you'd need to fetch it
         if (res.user?.rol) {
           this.cookieService.set('rol', res.user.rol, { secure: true, sameSite: 'Strict' });

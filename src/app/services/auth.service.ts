@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {CookieService} from "ngx-cookie-service";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class AuthService {
 
   private apiUrl = 'http://127.0.0.1:8000/api/users';
 
-  constructor(private http: HttpClient, private cookieService: CookieService) { }
+  constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) { }
 
   register(data: {
     email: string;
@@ -34,6 +35,8 @@ export class AuthService {
     this.cookieService.delete('refreshToken');
     this.cookieService.delete('rol');
     this.cookieService.delete('id');
+    this.router.navigate(['/login']);
+
   }
 
   isAuthenticated(): boolean {
@@ -46,6 +49,10 @@ export class AuthService {
 
   getUserId(): string {
     return this.cookieService.get('id') || '';
+  }
+
+  getMail(): string {
+    return <string>sessionStorage.getItem('userEmail');
   }
 
   hasRole(role: string): boolean {
