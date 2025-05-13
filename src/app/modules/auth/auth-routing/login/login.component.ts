@@ -12,7 +12,6 @@ import {CookieService} from "ngx-cookie-service";
 })
 
 export class LoginComponent implements OnInit {
-  // Definimos explícitamente la estructura del formulario
   loginForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required])
@@ -49,22 +48,35 @@ export class LoginComponent implements OnInit {
         this.cookieService.set('refreshToken', res.refresh, { secure: true, sameSite: 'Strict' });
         this.cookieService.set('id', res.user.id, { secure: true, sameSite: 'Strict' });
         sessionStorage.setItem('userEmail', res.user.email);
-        // Store user role if it comes in the response - if not, you'd need to fetch it
         if (res.user?.rol) {
           this.cookieService.set('rol', res.user.rol, { secure: true, sameSite: 'Strict' });
         }
-
-
         this.isLoading = false;
         this.notificationService.showNotification('¡Inicio de sesión exitoso!', 'success');
         this.router.navigate(['/home']);
+
       },
       error: (error) => {
         this.isLoading = false;
-        this.errorMessage = error?.error?.non_field_errors?.[0] || error?.error?.detail || 'Error al iniciar sesión.';
+        if (error.status === 401) {
+          this.errorMessage = 'Acceso no autorizado. Por favor, verifica tus credenciales.';
+          if (error.error === 'Credenciales inválidas') {
+            this.errorMessage = 'Credenciales inválidas. Por favor, verifica tu correo y contraseña.';
+          } else if (error.error?.detail) {
+            this.errorMessage = error.error.detail;
+          }
+        } else {
+          this.errorMessage = error?.error?.non_field_errors?.[0] ??
+            error?.error?.detail ??
+            'Error al iniciar sesión. Por favor, intenta nuevamente.';
+        }
         this.notificationService.showNotification(this.errorMessage, 'error');
       }
     });
+
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 1000);
   }
 
 }

@@ -58,13 +58,13 @@ export class ActivityDetailComponent implements OnInit {
   }
 
   cargarActividad(): void {
-
     if (this.actividadId) {
       this.loading = true;
       this.activityService.obtenerActividadPorId(this.actividadId).subscribe({
         next: (data) => {
           this.actividad = data;
           this.loading = false;
+          this.verificarUsuarioInscrito();
           this.notificationService.showNotification('Actividad cargada con éxito', 'success');
         },
         error: (err) => {
@@ -73,6 +73,14 @@ export class ActivityDetailComponent implements OnInit {
           this.notificationService.showNotification('Error al cargar la actividad', 'error');
         }
       });
+    }
+  }
+  verificarUsuarioInscrito(): void {
+    if (this.actividad && this.actividad.usuariosRegistrados && this.actividad.usuariosRegistrados.length > 0) {
+      const usuarioId = this.authServices.getUserId();
+      this.usuarioInscrito = this.actividad.usuariosRegistrados.some((usuario: any) => usuario.usuarioId === usuarioId);
+    } else {
+      this.usuarioInscrito = false;
     }
   }
 
@@ -110,6 +118,11 @@ export class ActivityDetailComponent implements OnInit {
         this.loadingUsuarios = false;
       }
     });
+  }
+
+  checkCreatorPermission(activity: any): boolean {
+    const userId = this.authServices.getUserId();
+    return activity.profesorId === userId;
   }
 
   cerrarModalUsuarios(): void {
@@ -182,6 +195,7 @@ export class ActivityDetailComponent implements OnInit {
           }
 
           this.loading = false;
+          window.location.reload();
           this.cerrarModalConfirmacion();
         },
         error: (error) => {

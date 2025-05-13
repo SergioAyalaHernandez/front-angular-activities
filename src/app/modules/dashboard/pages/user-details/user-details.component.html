@@ -27,7 +27,7 @@
       <div class="pb-2">
         <p class="flex justify-between">
           <span class="font-semibold text-gray-700">Rol:</span>
-          <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">{{ user.rol }}</span>
+          <span [ngClass]="{ 'bg-blue-100 text-blue-800': user.rol === 'estudiante', 'bg-green-100 text-green-800': user.rol === 'profesor', 'bg-purple-100 text-purple-800': user.rol === 'admin' }" class="px-2 py-1 rounded-full text-xs">{{ user.rol }}</span>
         </p>
       </div>
     </div>

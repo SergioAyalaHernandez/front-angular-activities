@@ -46,7 +46,8 @@ export class RegisterComponent {
         this.router.navigate(['/auth/login']);
       },
       error: (error) => {
-        this.notificationService.showNotification(`Error en el registro: ${error.error}`, 'error');
+        const errorMsg = error.error?.error || error.message || 'Error desconocido';
+        this.notificationService.showNotification(`Error en el registro: ${errorMsg}`, 'error');
       }
     });
   }

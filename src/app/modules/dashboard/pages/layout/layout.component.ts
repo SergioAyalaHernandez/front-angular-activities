@@ -1,4 +1,5 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {AuthService} from "../../../../services/auth.service";
 
 @Component({
   selector: 'app-layout',
@@ -11,10 +12,11 @@ export class LayoutComponent implements OnInit {
   isCollapsed: boolean = false;
 
   // Detectar el tamaño de la pantalla
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.checkIfMobile();
+    this.checkRolStudent();
   }
 
   // Método para verificar si la pantalla es móvil
@@ -31,5 +33,10 @@ export class LayoutComponent implements OnInit {
   // Método para alternar el estado del sidebar
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
+  }
+
+  checkRolStudent(){
+    const userRole = this.authService.getUserRole();
+    return userRole === 'estudiante';
   }
 }

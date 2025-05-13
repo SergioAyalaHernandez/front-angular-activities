@@ -99,18 +99,37 @@ export class ListActivitiesComponent {
   }
 
   confirmEditActivity(): void {
-    // @ts-ignore
     if (this.editForm.valid && this.activityToEdit) {
-      // @ts-ignore
       const updatedData = this.editForm.value;
-      this.listServices.actualizarActividad(this.activityToEdit.id, 'TOKEN', updatedData).subscribe(
+      const formData = new FormData();
+
+      // Agregar todos los campos del formulario al FormData
+      Object.keys(updatedData).forEach(key => {
+        if (key !== 'imagen') {
+          formData.append(key, updatedData[key]);
+        }
+      });
+
+      const imageInput = document.getElementById('imagen') as HTMLInputElement;
+      let imagenFile: File | undefined = undefined;
+      if (imageInput && imageInput.files && imageInput.files.length > 0) {
+        imagenFile = imageInput.files[0];
+      }
+
+      // Llamar al servicio con los parámetros correctos
+      this.listServices.actualizarActividad(
+        this.activityToEdit.id,
+        this.editForm.value,
+        imagenFile
+      ).subscribe(
         () => {
           this.notificationService.showNotification('Actividad actualizada con éxito', 'success');
           this.loadActivities();
           this.closeEditModal();
         },
         (error) => {
-          this.notificationService.showNotification(error.error.error, 'error');
+          const errorMessage = error.error?.error ?? 'Error al actualizar la actividad';
+          this.notificationService.showNotification(errorMessage, 'error');
         }
       );
     }

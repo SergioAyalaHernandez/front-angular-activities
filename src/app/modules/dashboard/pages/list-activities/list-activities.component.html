@@ -27,7 +27,7 @@
       <tbody>
       <tr *ngFor="let activity of activities" class="border-b hover:bg-pgreen-50">
         <td class="py-3 px-4">{{ activity.nombre }}</td>
-        <td class="py-3 px-4">{{ activity.descripcion}}</td>
+        <td class="py-3 px-4" [title]="activity.descripcion">{{ (activity.descripcion || '').split(' ').length > 10 ? (activity.descripcion || '').split(' ').slice(0, 10).join(' ') + '...' : activity.descripcion }}</td>
         <td class="py-3 px-4">{{ activity.fechaInicio | date: 'dd/MM/yyyy' }}</td>
         <td class="py-3 px-4">{{ activity.fechaFin | date: 'dd/MM/yyyy' }}</td>
         <td class="py-3 px-4">
@@ -90,12 +90,7 @@
           </ng-container>
 
           <!-- Botón para estudiantes -->
-          <ng-container *ngIf="!isAdminOrProfessor">
-            <button (click)="enrollActivity(activity)"
-                    class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-md text-sm">
-              Inscribirse
-            </button>
-          </ng-container>
+
         </td>
       </tr>
       </tbody>
@@ -124,6 +119,11 @@
   <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
     <h3 class="text-xl font-bold mb-4 text-pgreen-700">Editar Actividad</h3>
     <form [formGroup]="editForm" (ngSubmit)="confirmEditActivity()">
+      <div class="mb-4">
+        <label class="block text-gray-700">Imagen</label>
+        <input id="imagen" type="file" accept="image/*" class="w-full border rounded px-3 py-2"/>
+        <small class="text-gray-500">Deja vacío para mantener la imagen actual</small>
+      </div>
       <div class="mb-4">
         <label class="block text-gray-700">Nombre</label>
         <input formControlName="nombre" type="text" class="w-full border rounded px-3 py-2"/>

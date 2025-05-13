@@ -2,17 +2,23 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {from, Observable, switchMap} from "rxjs";
 
+export interface UsuarioRegistrado {
+  usuarioId: string;
+  correo: string;
+  fechaRegistro: string;
+}
+
 export interface Actividad {
   id: string;
   nombre: string;
   descripcion: string;
-  fechaInicio: string;
-  fechaFin: string;
-  horaInicio: string;
-  horaFin: string;
-  cupoMaximo: string;
+  fechaInicio: string | null;
+  fechaFin: string | null;
+  horaInicio?: string;
+  horaFin?: string;
+  cupoMaximo: number;
   recursos: string;
-  enlace: string;
+  enlace?: string;
   categoria: string;
   imagen?: {
     data: string;
@@ -21,6 +27,9 @@ export interface Actividad {
   };
   cuposDisponibles: number;
   estado: string;
+  creado?: string;
+  profesorId?: string | null;
+  usuariosRegistrados?: UsuarioRegistrado[];
 }
 
 @Injectable({
@@ -90,8 +99,19 @@ export class ActivityService {
 
   actualizarActividad(
     id: string,
-    token: string,
-    actividad: Partial<Actividad>,
+    actividad: {
+      nombre?: string,
+      descripcion?: string,
+      fechaInicio?: string,
+      fechaFin?: string,
+      horaInicio?: string,
+      horaFin?: string,
+      cupoMaximo?: string,
+      recursos?: string,
+      enlace?: string,
+      categoria?: string,
+      estado?: string
+    },
     imagen?: File
   ): Observable<any> {
     if (imagen) {
