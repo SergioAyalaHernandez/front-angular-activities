@@ -691,5 +691,3 @@ El sistema proporciona indicadores visuales claros para diferentes estados:
 - Indicadores visuales de campos válidos/inválidos
 - Deshabilitación de botón de envío hasta validación completa
 
-#   f r o n t - a n g u l a r - a c t i v i t i e s  
- 
