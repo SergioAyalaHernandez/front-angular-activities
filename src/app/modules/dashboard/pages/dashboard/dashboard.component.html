@@ -3,8 +3,9 @@
 
   <!-- Título y Subtítulo -->
   <div class="text-center py-6">
-    <h1 class="text-4xl font-bold text-gray-900">Nuestras Actividades</h1>
-    <p class="text-lg text-gray-600 mt-2">Explora una variedad de actividades diseñadas para mejorar tus habilidades.</p>
+    <h1 class="text-4xl font-bold text-gray-900">🎯 ¡Nuestras Actividades!</h1>
+    <p class="text-lg text-gray-600 mt-2">
+      Descubre experiencias únicas pensadas para potenciar tus habilidades, divertirte y crecer al máximo. ¡Explora y encuentra tu favorita! 💪🔥</p>
   </div>
 
   <!-- Contenido del grid -->
@@ -23,7 +24,8 @@
           </div>
           <div class="absolute bottom-0 left-0 p-4 md:p-6 bg-black bg-opacity-50 w-full">
             <h2 class="text-xl font-semibold text-white">{{ actividades[i].nombre }}</h2>
-            <p class="text-base text-white mt-2">{{ actividades[i].descripcion }}</p>
+            <p class="text-base text-white mt-2">{{ (actividades[i].descripcion || '').split(' ').length > 6 ? (actividades[i].descripcion || '').split(' ').slice(0, 6).join(' ') + '...' : actividades[i].descripcion }}</p>
+
             <a [routerLink]="['actividades/', actividades[i].id]" class="focus:outline-none focus:underline flex items-center mt-4 text-white hover:text-gray-200 hover:underline">
               <p class="pr-2 text-sm font-medium leading-none">Leer más</p>
               <svg class="fill-stroke" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

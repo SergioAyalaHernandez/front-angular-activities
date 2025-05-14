@@ -88,9 +88,19 @@
         </div>
       </div>
 
-      <div class="mb-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">Dirección</h3>
-        <p class="text-gray-700">{{ actividad.recursos }}</p>
+      <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Dirección</h3>
+          <a [href]="actividad.recursos" target="_blank" class="text-blue-600 hover:text-blue-800 underline">
+            {{ actividad.recursos }}
+          </a>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Enlace</h3>
+          <a (click)="abrirEnlace(actividad.enlace)" class="text-blue-600 hover:text-blue-800 underline cursor-pointer">
+            {{ actividad.enlace }}
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -108,11 +118,14 @@
 
     <div class="flex gap-2">
       <!-- Botón para inscribirse (solo estudiantes) -->
-      <button *ngIf="actividad && authServices.hasRole('estudiante') && actividad.cuposDisponibles > 0 && !usuarioInscrito"
-              (click)="inscribirseEnActividad()"
-              class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded flex items-center">
+      <button
+        *ngIf="actividad && authServices.hasRole('estudiante') && actividad.cuposDisponibles > 0 && !usuarioInscrito"
+        (click)="inscribirseEnActividad()"
+        class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/>
+          <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                clip-rule="evenodd"/>
         </svg>
         Inscribirse
       </button>
@@ -122,8 +135,11 @@
       <div *ngIf="actividad && authServices.hasRole('estudiante') && usuarioInscrito"
            class="bg-gray-100 text-gray-800 font-medium py-2 px-4 rounded flex items-center justify-between">
         <div class="flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-600" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-600" viewBox="0 0 20 20"
+               fill="currentColor">
+            <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"/>
           </svg>
           Ya estás inscrito
         </div>
@@ -131,7 +147,9 @@
           (click)="cancelarRegistroUsuario(authServices.getUserId())"
           class="bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded text-xs flex items-center ml-4">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            <path fill-rule="evenodd"
+                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                  clip-rule="evenodd"/>
           </svg>
           Darse de baja
         </button>
@@ -148,7 +166,6 @@
     </div>
   </div>
 </div>
-
 
 
 <!-- Modal para mostrar usuarios inscritos -->
@@ -217,7 +234,9 @@
               (click)="cancelarRegistroUsuario(usuario.usuarioId)"
               class="bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded text-xs flex items-center mx-auto">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd"
+                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                      clip-rule="evenodd"/>
               </svg>
               Eliminar
             </button>
@@ -237,13 +256,15 @@
 </div>
 
 <!-- Modal de confirmación para eliminar usuario -->
-<div *ngIf="mostrarModalConfirmacion" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+<div *ngIf="mostrarModalConfirmacion"
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
   <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden">
     <div class="px-6 py-4 border-b">
       <h3 class="text-lg font-medium text-gray-900">Confirmar eliminación</h3>
     </div>
     <div class="p-6">
-      <p class="text-gray-700">¿Estás seguro de que deseas eliminar este usuario de la actividad? Esta acción no se puede deshacer.</p>
+      <p class="text-gray-700">¿Estás seguro de que deseas eliminar este usuario de la actividad? Esta acción no se
+        puede deshacer.</p>
     </div>
     <div class="bg-gray-50 px-4 py-3 flex justify-end space-x-3">
       <button

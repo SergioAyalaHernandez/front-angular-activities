@@ -30,6 +30,7 @@ export class ActivityDetailComponent implements OnInit {
   mostrarModal = false;
   escalaImagen = 1;
   isAdmin = false;
+
   // @ts-ignore
   history = window.history;
 
@@ -218,6 +219,16 @@ export class ActivityDetailComponent implements OnInit {
   cerrarModalConfirmacion(): void {
     this.mostrarModalConfirmacion = false;
     this.usuarioAEliminar = null;
+  }
+
+  abrirEnlace(url: string | undefined): void {
+    if (!url) return;
+
+    if (!url.match(/^https?:\/\//i)) {
+      url = 'https://' + url;
+    }
+
+    window.open(url, '_blank');
   }
 
 }
