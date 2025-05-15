@@ -123,7 +123,7 @@ export class ActivityDetailComponent implements OnInit {
 
   checkCreatorPermission(activity: any): boolean {
     const userId = this.authServices.getUserId();
-    return activity.profesorId === userId;
+    return activity.profesorId === userId || this.isAdmin;
   }
 
   cerrarModalUsuarios(): void {

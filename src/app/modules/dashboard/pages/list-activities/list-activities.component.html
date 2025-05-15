@@ -134,11 +134,15 @@
       </div>
       <div class="mb-4">
         <label class="block text-gray-700">Fecha Inicio</label>
-        <input formControlName="fechaInicio" type="date" class="w-full border rounded px-3 py-2"/>
+        <input formControlName="fechaInicio" type="date" class="w-full border rounded px-3 py-2"
+               [attr.data-date]="editForm.get('fechaInicio')?.value | date: 'dd/MM/yyyy'"/>
+        <small class="text-gray-500">Formato: dd/MM/yyyy</small>
       </div>
       <div class="mb-4">
         <label class="block text-gray-700">Fecha Fin</label>
-        <input formControlName="fechaFin" type="date" class="w-full border rounded px-3 py-2"/>
+        <input formControlName="fechaFin" type="date" class="w-full border rounded px-3 py-2"
+               [attr.data-date]="editForm.get('fechaFin')?.value | date: 'dd/MM/yyyy'"/>
+        <small class="text-gray-500">Formato: dd/MM/yyyy</small>
       </div>
       <div class="mb-4">
         <label class="block text-gray-700">Cupo Máximo</label>

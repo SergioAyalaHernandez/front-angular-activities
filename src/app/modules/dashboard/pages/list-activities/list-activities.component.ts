@@ -61,14 +61,21 @@ export class ListActivitiesComponent {
 
   editActivity(activity: any): void {
     this.activityToEdit = activity;
-    // @ts-ignore
+
+    const formatDate = (dateString: string): string => {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      return date.toISOString().split('T')[0];
+    };
+
     this.editForm.patchValue({
       nombre: activity.nombre,
       descripcion: activity.descripcion,
-      fechaInicio: activity.fechaInicio,
-      fechaFin: activity.fechaFin,
+      fechaInicio: formatDate(activity.fechaInicio),
+      fechaFin: formatDate(activity.fechaFin),
       cupoMaximo: activity.cupoMaximo,
     });
+
     this.showEditModal = true;
   }
 
@@ -215,5 +222,7 @@ export class ListActivitiesComponent {
   showPermissionAlert(): void {
     this.notificationService.showNotification('No tienes permisos para modificar esta actividad. Solo el profesor que la creó puede editarla o eliminarla.', 'warning');
   }
+
+
 
 }
