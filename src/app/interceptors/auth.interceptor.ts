@@ -23,10 +23,13 @@ export class AuthInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    // Skip adding token for authentication endpoints
-    if (request.url.includes('/auth/login/') || request.url.includes('/auth/refresh/')) {
+    if (
+      request.url.includes('/login') ||
+      request.url.includes('/refresh')
+    ) {
       return next.handle(request);
     }
+
 
     // Add token to the request
     const accessToken = this.cookieService.get('accessToken');
