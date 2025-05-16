@@ -26,7 +26,7 @@ const routes: Routes = [
     path: 'create-user',
     component: CreateUsersComponent,
     canActivate: [RoleGuard],
-    data: { rol: ['admin','profesor'] },
+    data: { rol: ['admin'] },
   },
   { path: 'users',
     component: ListUsersComponent,
